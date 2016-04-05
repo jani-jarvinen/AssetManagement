@@ -91,7 +91,7 @@ namespace AssetManagementWeb.Controllers
             }
         }
 
-        //
+        // Päällekirjoitus testi
         // GET: /Account/VerifyCode
         [AllowAnonymous]
         public async Task<ActionResult> VerifyCode(string provider, string returnUrl, bool rememberMe)
