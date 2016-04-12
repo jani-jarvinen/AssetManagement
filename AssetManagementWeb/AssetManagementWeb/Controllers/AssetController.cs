@@ -41,8 +41,8 @@ namespace AssetManagementWeb.Controllers
                     view.Id = asset.Id;
                     view.LocationCode = asset.AssetLocation.Code;
                     view.LocationName = asset.AssetLocation.Name;
-                    view.AssetCode= asset.Asset.Code;
-                    view.AssetName = asset.Asset.Type + ": "+asset.Asset.Model;
+                    view.AssetCode = asset.Asset.Code;
+                    view.AssetName = asset.Asset.Type + ": " + asset.Asset.Model;
                     view.LastSeen = asset.LastSeen.Value.ToString(fiFi);
 
                     model.Add(view);
@@ -54,6 +54,38 @@ namespace AssetManagementWeb.Controllers
             }
 
             return View(model);
+        }
+
+        public ActionResult ListJson()
+        {
+            List<LocatedAssetsViewModel> model = new List<LocatedAssetsViewModel>();
+
+            PointSQLSrv1Entities entities = new PointSQLSrv1Entities();
+            try
+            {
+                List<AssetLocation1> assets = entities.AssetLocations1.ToList();
+
+                // muodostetaan näkymämalli tietokannan rivien pohjalta
+                CultureInfo fiFi = new CultureInfo("fi-FI");
+                foreach (AssetLocation1 asset in assets)
+                {
+                    LocatedAssetsViewModel view = new LocatedAssetsViewModel();
+                    view.Id = asset.Id;
+                    view.LocationCode = asset.AssetLocation.Code;
+                    view.LocationName = asset.AssetLocation.Name;
+                    view.AssetCode = asset.Asset.Code;
+                    view.AssetName = asset.Asset.Type + ": " + asset.Asset.Model;
+                    view.LastSeen = asset.LastSeen.Value.ToString(fiFi);
+
+                    model.Add(view);
+                }
+            }
+            finally
+            {
+                entities.Dispose();
+            }
+
+            return Json(model, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
